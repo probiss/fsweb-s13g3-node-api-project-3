@@ -1,21 +1,24 @@
-const users = require("../users/users-model");
+const User = require("../users/users-model");
 
 function logger(req, res, next) {
+  //console.log(req);
   console.log(
-    `${new Date} --- ${req.url}   ---- ${req.ip}`
-  )
+    `${req.method} --- ${req.originalUrl}   ---- ${new Date().toLocaleString()}`
+  );
   next();
 }
 
-function validateUserId(req, res, next) {
-  const userId = req.params.id;
-  const user = users.find(user => user.id === userId);
-
-  if (user) {
-    req.user = user;
-    next()
-  } else {
-    res.status(404).json({ message: "kullanıcı bulunamadı" });
+async function validateUserId(req, res, next) {
+  try {
+    const user = await User.getById(req.params.id);
+    if (!user) {
+      res.status(404).json({ message: "not found" });
+    } else {
+      req.user = user; //req user diye değişken oluşturduk ve userları atadık
+      next();
+    }
+  } catch (error) {
+    res.status(500).json({ message: "İşlem yapılamadı" });
   }
 }
 
@@ -25,6 +28,7 @@ function validateUser(req, res, next) {
   if (!name) {
     res.status(400).json({ message: "gerekli name alanı eksik" });
   } else {
+    req.name=name;
     next();
   }
 }
@@ -36,6 +40,7 @@ function validatePost(req, res, next) {
   if (!text) {
     res.status(400).json({ message: "gerekli text alanı eksik" });
   } else {
+    req.text=text;
     next();
   }
 }
