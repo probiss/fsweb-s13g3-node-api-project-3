@@ -1,13 +1,16 @@
 const express = require('express');
+const router = express.Router();
 
+const postsModel = require('../posts/posts-model');
+const usersModel = require('./users-model');
+const {validateUserId, logger, validateUser, validatePost} =require("../middleware/middleware");
 // `users-model.js` ve `posts-model.js` sayfalarına ihtiyacınız var
 // ara yazılım fonksiyonları da gereklidir
 
-const router = express.Router();
 
 router.get('/', (req, res) => {
-  // TÜM KULLANICILARI İÇEREN DİZİYİ DÖNDÜRÜN
-});
+    res.json(users)
+  });
 
 router.get('/:id', (req, res) => {
   // USER NESNESİNİ DÖNDÜRÜN
@@ -42,3 +45,5 @@ router.post('/:id/posts', (req, res) => {
 });
 
 // routerı dışa aktarmayı unutmayın
+
+module.exports = router;
