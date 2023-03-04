@@ -1,17 +1,18 @@
 const express = require("express");
-
+const router = express.Router();
+router.use(express.json());
 
 const User = require("./users-model");
 const Post = require("../posts/posts-model");
 const {logger,validateUserId,validateUser,validatePost } = require("../middleware/middleware");
 
 
-const router = express.Router();
-router.use(express.json());
+
 
 router.get("/", (req, res, next) => {
   // TÜM KULLANICILARI İÇEREN DİZİYİ DÖNDÜRÜN
-  User.get()
+  User
+    .get()
     .then((user) => res.status(201).json(user))
     .catch((error) => {
       next(error); //aşağıda yazdığımız error middleware'e gidiyor.
@@ -29,7 +30,8 @@ router.get("/:id", validateUserId, (req, res, next) => {
 router.post("/", validateUser, (req, res, next) => {
   // YENİ OLUŞTURULAN USER NESNESİNİ DÖNDÜRÜN
   // istek gövdesini doğrulamak için ara yazılım gereklidir.
-  User.insert({ name: req.name })
+  User
+    .insert({ name: req.name })
     .then((user) => res.json(user))
     .catch();
 });

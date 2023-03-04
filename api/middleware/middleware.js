@@ -1,9 +1,8 @@
 const User = require("../users/users-model");
 
 function logger(req, res, next) {
-  //console.log(req);
   console.log(
-    `${req.method} --- ${req.originalUrl}   ---- ${new Date().toLocaleString()}`
+    `${req.method} --- ${req.url}   ---- ${new Date().toLocaleString()}`
   );
   next();
 }
@@ -20,7 +19,7 @@ async function validateUserId(req, res, next) {
   } catch (error) {
     res.status(500).json({ message: "İşlem yapılamadı" });
   }
-}
+};
 
 function validateUser(req, res, next) {
   const { name } = req.body;
@@ -31,12 +30,11 @@ function validateUser(req, res, next) {
     req.name=name;
     next();
   }
-}
+};
 
 
 function validatePost(req, res, next) {
   const { text } = req.body;
-
   if (!text) {
     res.status(400).json({ message: "gerekli text alanı eksik" });
   } else {
